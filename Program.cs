@@ -3,42 +3,27 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+var listaCidades = new List<string> { "São Paulo", "Rio de Janeiro", "Belo Horizonte" };
+var listaProdutos = new List<string> { "Produto 1", "Produto 2", "Produto 3" };
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+// PRIMEIRO ENDPOINT
+app.MapGet("/", () => "Minha primeira apicação em C#!");
+// SEGUNDO ENDPOINT
+app.MapGet("/sobre", () => "Conteudo sobre API!");
+// TERCEIRO ENDPOINT    
+app.MapGet("/produtos", () => "Lista de produtos!" + string.Join(", ", listaProdutos));
+// QUARTO ENDPOINT
+app.MapGet("cidades", () => "Lista de cidades! " + string.Join(", ", listaCidades));
+// QUINTO ENDPOINT
+app.MapGet("data", () => "Data atual: " + DateTime.Now);
+// SEXTO ENDPOINT
+app.MapGet("data-atual", () => "Data atual: " + DateTime.Now.ToString("dd/MM/yyyy"));
+
+// SÉTIMO ENDPOINT
+app.MapGet("hora", () => "Hora atual: " + DateTime.Now.ToString("HH:mm:ss"));
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
